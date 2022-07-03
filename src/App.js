@@ -3,6 +3,13 @@ import { useEffect,useState } from 'react';
 import axios from 'axios';
 import './App.css';
 import Login from './components/login/Login';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import Home from './components/home/Home';
+import Error from './components/Error/ErrorPage';
 
 function App() {
   const [info,setInfo] = useState([]);
@@ -16,8 +23,15 @@ function App() {
     });
   },[])
   return (
-    <div className="App">
-      <Login datos={info} ></Login>
+    <div>
+      <Router> 
+        <Routes>
+          <Route path="/home/:name" element={<Home/>}/>
+          <Route path="/" element={<Login datos={info} />}/>
+          <Route path="/home/:name/:album"/>
+          <Route path="*" element={<Error/>}/>
+        </Routes> 
+    </Router>
     </div>
   );
 }

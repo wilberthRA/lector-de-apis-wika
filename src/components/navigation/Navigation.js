@@ -12,10 +12,13 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Mood } from "@mui/icons-material";
+import { useParams } from "react-router-dom";
 const pages = ['Home'];
 const settings = ['Logout'];
 
+
 export default function Navigation() {
+  let {name}  = useParams();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -54,7 +57,7 @@ export default function Navigation() {
               textDecoration: 'none',
             }}
           >
-            Bienvenido -user-
+            Bienvenido {name}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -110,8 +113,9 @@ export default function Navigation() {
               textDecoration: 'none',
             }}
           >
-            Bienvenido -user-
+            Bienvenido {name}
           </Typography>
+          
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button

@@ -6,11 +6,18 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import axios from "axios";
 import Searcher from "../commons/Searcher";
+import { useNavigate } from "react-router-dom";
 
-export default function AlbumList() {
+export default function AlbumList(props) {
   const [albums, setAlbums] = useState([]);
   const [filterAlbum, setFilterALbum] = useState("");
+  let navigate = useNavigate();
 
+  useEffect(()=>{
+    if(filterAlbum){
+      navigate("/home/Leanne Graham/"+filterAlbum+"")
+    }
+  });
   useEffect(() => {
     axios.get("https://jsonplaceholder.typicode.com/albums ").then((res) => {
       const data = res.data;
@@ -26,14 +33,15 @@ export default function AlbumList() {
         setFilter={setFilterALbum}
       ></Searcher>
       <div sx="backgroundColor:red">hola {filterAlbum}</div>
+      {console.log(albums)}
       <nav aria-label="secondary mailbox folders">
         <List>
           {albums.map(
             (album) =>
               (!filterAlbum || album?.title.startsWith(filterAlbum)) && (
-                <ListItem disablePadding key={album.id}>
+                <ListItem disablePadding key={album.id} >
                   <ListItemButton>
-                    <ListItemText primary={album.title} />
+                    <ListItemText primary={album.title} /> 
                   </ListItemButton>
                 </ListItem>
               )
