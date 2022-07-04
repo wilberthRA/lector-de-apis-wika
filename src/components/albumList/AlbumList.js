@@ -6,22 +6,27 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import axios from "axios";
 import Searcher from "../commons/Searcher";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function AlbumList(props) {
+  let {id}  = useParams();
   const [albums, setAlbums] = useState([]);
   const [filterAlbum, setFilterALbum] = useState("");
-  const navigate = useNavigate();
+  let navigate = useNavigate();
 
-  const handleClick=(albumId)=>{
-    //if(filterAlbum){
-      console.log("hola redirect")
-      navigate(`/home/Bret/${albumId}`)
-    //}
-  };
+  useEffect(()=>{
+    if(filterAlbum){
+      navigate("/home/Leanne Graham/"+filterAlbum+"")
+    }
+  });
   useEffect(() => {
     axios.get("https://jsonplaceholder.typicode.com/albums ").then((res) => {
-      const data = res.data;
+      const data = [];
+      const busqueda = res.data.map((filtro)=>{
+        if(filtro.userId == id){
+          data.push(filtro);
+        } 
+      } );
       setAlbums(data);
     });
   }, []);
@@ -41,7 +46,7 @@ export default function AlbumList(props) {
             (album) =>
               (!filterAlbum || album?.title.startsWith(filterAlbum)) && (
                 <ListItem disablePadding key={album.id} >
-                  <ListItemButton onClick={() => handleClick(album.id)}>
+                  <ListItemButton>
                     <ListItemText primary={album.title} /> 
                   </ListItemButton>
                 </ListItem>

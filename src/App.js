@@ -27,9 +27,9 @@ function App() {
     <div>
       <Router> 
         <Routes>
-          <Route path="/home/:username" element={<Home/>}/>
+          <Route path="/home/:id" element={<Home/>}/>
           <Route path="/" element={<Login datos={info} />}/>
-          <Route path="/home/:username/:album" element={ <AlbumDetails/> }/>
+          <Route path="/home/:id/:album" element={ <AlbumDetails/> }/>
           <Route path="*" element={<Error/>}/>
         </Routes> 
     </Router>
