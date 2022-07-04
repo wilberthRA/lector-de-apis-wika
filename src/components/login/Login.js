@@ -13,7 +13,7 @@ export default function Login(props) {
     const resultado = props.datos.find((validacion)=>(validacion.name === user.value || validacion.username === user.value) && validacion.address.zipcode === password.value);
     if(resultado){
       console.log("bienvenido"+ resultado.name);
-      navigate("/home/"+resultado.name+"");
+      navigate("/home/"+resultado.username+"");
     }else{
       console.log("no se encuentra")
     }

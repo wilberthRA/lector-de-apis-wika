@@ -11,13 +11,14 @@ import { useNavigate } from "react-router-dom";
 export default function AlbumList(props) {
   const [albums, setAlbums] = useState([]);
   const [filterAlbum, setFilterALbum] = useState("");
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
-  useEffect(()=>{
-    if(filterAlbum){
-      navigate("/home/Leanne Graham/"+filterAlbum+"")
-    }
-  });
+  const handleClick=(albumId)=>{
+    //if(filterAlbum){
+      console.log("hola redirect")
+      navigate(`/home/Bret/${albumId}`)
+    //}
+  };
   useEffect(() => {
     axios.get("https://jsonplaceholder.typicode.com/albums ").then((res) => {
       const data = res.data;
@@ -40,7 +41,7 @@ export default function AlbumList(props) {
             (album) =>
               (!filterAlbum || album?.title.startsWith(filterAlbum)) && (
                 <ListItem disablePadding key={album.id} >
-                  <ListItemButton>
+                  <ListItemButton onClick={() => handleClick(album.id)}>
                     <ListItemText primary={album.title} /> 
                   </ListItemButton>
                 </ListItem>

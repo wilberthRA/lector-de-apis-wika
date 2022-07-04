@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import Home from './components/home/Home';
 import Error from './components/Error/ErrorPage';
+import AlbumDetails from './components/albumDetails/AlbumDetails';
 
 function App() {
   const [info,setInfo] = useState([]);
@@ -26,9 +27,9 @@ function App() {
     <div>
       <Router> 
         <Routes>
-          <Route path="/home/:name" element={<Home/>}/>
+          <Route path="/home/:username" element={<Home/>}/>
           <Route path="/" element={<Login datos={info} />}/>
-          <Route path="/home/:name/:album"/>
+          <Route path="/home/:username/:album" element={ <AlbumDetails/> }/>
           <Route path="*" element={<Error/>}/>
         </Routes> 
     </Router>
