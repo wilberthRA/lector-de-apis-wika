@@ -1,38 +1,84 @@
-import React, { useState } from 'react';
-import { Grid, Button,TextField } from '@mui/material';
-import './Login.css';
+import React, { useState } from "react";
+import { Grid, Button, TextField, dividerClasses, Avatar } from "@mui/material";
+import "./Login.css";
 import { useNavigate } from "react-router-dom";
-import { Container } from '@mui/system';
+import { Container } from "@mui/system";
 
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import ButtonBase from "@mui/material/ButtonBase";
+
+import Box from "@mui/material/Box";
+
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 export default function Login(props) {
-  const [user,setUser] = useState('');
-  const [password,setPassword] = useState('');  
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
   let navigate = useNavigate();
-  const validar = ()=>{
-    const resultado = props.datos.find((validacion)=>(validacion.name === user.value || validacion.username === user.value) && validacion.address.zipcode === password.value);
-    if(resultado){
-      console.log("bienvenido"+ resultado.name);
-      navigate("/home/"+resultado.id+"");
-    }else{
-      console.log("no se encuentra")
+  const validar = () => {
+    const resultado = props.datos.find(
+      (validacion) =>
+        (validacion.name === user.value ||
+          validacion.username === user.value) &&
+        validacion.address.zipcode === password.value
+    );
+    if (resultado) {
+      console.log("bienvenido" + resultado.name);
+      navigate("/home/" + resultado.id + "");
+    } else {
+      console.log("no se encuentra");
     }
   };
-  
-  return (
-        <Container maxWidth="xl">
-          <Grid container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            style={{ minHeight: '100vh' }}
-          >
-            <TextField id="outlined-basic" onChange={event=> setUser(event.target)}  label="Username or email" variant="outlined" margin="dense" /><br/>
-            <TextField id="outlined-basic" onChange={event=> setPassword(event.target)} label="Password" variant="outlined" margin="dense"/><br/>
-            <Button onClick={validar} variant="contained">Contained</Button>
-          </Grid>            
-        </Container>
-  )
-}
 
+  const paperStyle = {
+    padding: 20,
+    height: "30vh",
+    width: 280,
+    margin: "250px auto",
+  };
+
+  const avatarStyle = {
+    backgroundColor: "#1bbd7e",
+  };
+
+  const inputStyle = {
+    marginBottom: 15,
+  };
+
+  return (
+    <Grid>
+      <Paper elevation={10} style={paperStyle}>
+        <Grid align="center">
+          <Avatar style={avatarStyle}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <h2>Log In </h2>
+        </Grid>
+        <TextField
+          style={inputStyle}
+          id="outlined-basic"
+          onChange={(event) => setUser(event.target)}
+          label="Username"
+          variant="outlined"
+          fullWidth
+          required
+        />
+        <TextField
+          style={inputStyle}
+          id="outlined-basic"
+          onChange={(event) => setPassword(event.target)}
+          label="Password"
+          variant="outlined"
+          type="password"
+          fullWidth
+          required
+        />
+        <Button onClick={validar} variant="contained" fullWidth color="primary">
+          Login
+        </Button>
+      </Paper>
+    </Grid>
+  );
+}

@@ -6,54 +6,70 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import axios from "axios";
 import Searcher from "../commons/Searcher";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Typography from "@mui/material/Typography";
+import { Container, Grid, Paper } from "@mui/material";
+import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 
 export default function AlbumList(props) {
-  let {id}  = useParams();
+  const { id } = useParams();
   const [albums, setAlbums] = useState([]);
   const [filterAlbum, setFilterALbum] = useState("");
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
-  useEffect(()=>{
-    if(filterAlbum){
-      navigate("/home/Leanne Graham/"+filterAlbum+"")
-    }
-  });
+  const handleClick = (albumId) => {
+    navigate(`/home/${id}/${albumId}`);
+  };
   useEffect(() => {
     axios.get("https://jsonplaceholder.typicode.com/albums ").then((res) => {
       const data = [];
-      const busqueda = res.data.map((filtro)=>{
-        if(filtro.userId == id){
+      res.data.map((filtro) => {
+        if (filtro.userId == id) {
           data.push(filtro);
-        } 
-      } );
+        }
+      });
       setAlbums(data);
     });
   }, []);
 
+  const paperStyle = {
+    padding: 20,
+    height: "auto",
+    width: "80%",
+    margin: "25px auto",
+  };
+
   return (
-    <div>
-      <Searcher
-        label="Album"
-        items={albums}
-        setFilter={setFilterALbum}
-      ></Searcher>
-      <div sx="backgroundColor:red">hola {filterAlbum}</div>
-      {console.log(albums)}
-      <nav aria-label="secondary mailbox folders">
-        <List>
-          {albums.map(
-            (album) =>
-              (!filterAlbum || album?.title.startsWith(filterAlbum)) && (
-                <ListItem disablePadding key={album.id} >
-                  <ListItemButton>
-                    <ListItemText primary={album.title} /> 
-                  </ListItemButton>
-                </ListItem>
-              )
-          )}
-        </List>
-      </nav>
-    </div>
+    <Grid>
+      <Paper elevation={10} style={paperStyle}>
+        <Grid align="center">
+          <Typography variant="h4" component="h4">
+            My Albums
+          </Typography>
+          <Searcher
+            label="Album"
+            items={albums}
+            setFilter={setFilterALbum}
+          ></Searcher>
+          <nav aria-label="secondary mailbox folders">
+            <List>
+              {albums.map(
+                (album) =>
+                  (!filterAlbum || album?.title.startsWith(filterAlbum)) && (
+                    <ListItem disablePadding key={album.id}>
+                      <ListItemButton onClick={() => handleClick(album.id)}>
+                        <ListItemIcon>
+                          <ImageSearchIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={album.title} />
+                      </ListItemButton>
+                    </ListItem>
+                  )
+              )}
+            </List>
+          </nav>
+        </Grid>
+      </Paper>
+    </Grid>
   );
 }

@@ -15,11 +15,9 @@ import AlbumDetails from './components/albumDetails/AlbumDetails';
 function App() {
   const [info,setInfo] = useState([]);
   useEffect(()=> {
-    /* document.title = `You clicked ${count} times` */
     axios.get('https://jsonplaceholder.typicode.com/users')
     .then(res =>{
       const data = res.data;
-      console.log(data);
       setInfo(data);
     });
   },[])

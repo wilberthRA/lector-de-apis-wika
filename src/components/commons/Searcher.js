@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function Searcher({ label, items, setFilter }) {
   const handleChange = (e) => {
-    console.log(e.target.value);
     setFilter(e.target.value);
   };
   let navigate = useNavigate();

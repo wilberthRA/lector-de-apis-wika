@@ -14,6 +14,6 @@ useEffect(()=> {
   });
 },[])
   return (
-    <div>Bienvenido {info.name}</div>
+    <div>Welcome {info.name}</div>
   )
 }
