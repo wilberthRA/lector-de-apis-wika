@@ -13,14 +13,14 @@ import Box from "@mui/material/Box";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-export default function Login(props) {
+export default function Login({ datos, setLogged }) {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [valid, setValid] = useState(true);
   const navigate = useNavigate();
-  
+
   const validar = () => {
-    const resultado = props.datos.find(
+    const resultado = datos.find(
       (validacion) =>
         (validacion.email === user.value ||
           validacion.username === user.value) &&
@@ -31,8 +31,8 @@ export default function Login(props) {
       navigate("/home/" + resultado.id + "");
     } else {
       setValid(false);
-      console.log("no se encuentra");
     }
+    setLogged(valid);
   };
 
   const paperStyle = {
@@ -68,7 +68,7 @@ export default function Login(props) {
           fullWidth
           required
           error={!valid}
-          helperText={!valid ? 'Wrong data' : ' '}
+          helperText={!valid ? "Wrong data" : " "}
         />
         <TextField
           style={inputStyle}
@@ -80,7 +80,7 @@ export default function Login(props) {
           fullWidth
           required
           error={!valid}
-          helperText={!valid ? 'Wrong data' : ' '}
+          helperText={!valid ? "Wrong data" : " "}
         />
         <Button onClick={validar} variant="contained" fullWidth color="primary">
           Login

@@ -9,7 +9,7 @@ import Searcher from "../commons/Searcher";
 import { useNavigate, useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { Container, Grid, Paper } from "@mui/material";
-import ImageSearchIcon from '@mui/icons-material/ImageSearch';
+import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 
 export default function AlbumList(props) {
   const { id } = useParams();
