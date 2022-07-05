@@ -16,25 +16,28 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 export default function Login(props) {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
-  let navigate = useNavigate();
+  const [valid, setValid] = useState(true);
+  const navigate = useNavigate();
+  
   const validar = () => {
     const resultado = props.datos.find(
       (validacion) =>
-        (validacion.name === user.value ||
+        (validacion.email === user.value ||
           validacion.username === user.value) &&
         validacion.address.zipcode === password.value
     );
     if (resultado) {
-      console.log("bienvenido" + resultado.name);
+      setValid(true);
       navigate("/home/" + resultado.id + "");
     } else {
+      setValid(false);
       console.log("no se encuentra");
     }
   };
 
   const paperStyle = {
     padding: 20,
-    height: "30vh",
+    height: "35vh",
     width: 280,
     margin: "250px auto",
   };
@@ -60,10 +63,12 @@ export default function Login(props) {
           style={inputStyle}
           id="outlined-basic"
           onChange={(event) => setUser(event.target)}
-          label="Username"
+          label="Username or Email"
           variant="outlined"
           fullWidth
           required
+          error={!valid}
+          helperText={!valid ? 'Wrong data' : ' '}
         />
         <TextField
           style={inputStyle}
@@ -74,6 +79,8 @@ export default function Login(props) {
           type="password"
           fullWidth
           required
+          error={!valid}
+          helperText={!valid ? 'Wrong data' : ' '}
         />
         <Button onClick={validar} variant="contained" fullWidth color="primary">
           Login
