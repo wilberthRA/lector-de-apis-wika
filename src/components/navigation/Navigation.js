@@ -27,7 +27,7 @@ export default function Navigation() {
   const datos = jwt_decode(cookies.get("User"));
   
   const handleClick = () => {
-    navigate(`/home/${id}`);
+    navigate(`/home`);
   };
 
   const handleOpenNavMenu = (event) => {

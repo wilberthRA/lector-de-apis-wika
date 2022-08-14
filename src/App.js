@@ -27,28 +27,17 @@ function App() {
       setInfo(data);
     });
   }, []);
-  useEffect(()=>{
-    try{
-      if(cookies.get("User")){
-        setLogged(true);
-      };
-      
-    }catch{
-      setLogged(false);
-    }
-    
-  },[])
-
-  
 
   const ProtectedRoute = ({ user, children }) => {
     try{
       if(cookies.get("User")){
         user = true;
+        
       };
       
     }catch{
       user = false;
+      
     }
     if (!user) {
       return <Navigate to="/" replace />;
