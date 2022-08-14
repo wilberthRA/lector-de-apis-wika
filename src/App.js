@@ -17,7 +17,7 @@ import Update from "./components/update/Update";
 
 function App() {
   const cookies = new Cookies();
-  const token = cookies.get("User");
+  let token;
   const [info, setInfo] = useState([]);
   const [logged, setLogged] = useState(false);
   useEffect(() => {
@@ -27,16 +27,32 @@ function App() {
       setInfo(data);
     });
   }, []);
+  useEffect(()=>{
+    try{
+      if(cookies.get("User")){
+        setLogged(true);
+      };
+      
+    }catch{
+      setLogged(false);
+    }
+    
+  },[])
 
   
 
   const ProtectedRoute = ({ user, children }) => {
-    if(token){
-      setLogged(true);
-      <Navigate to="home/" />
-    }else{
-      <Navigate to="/" replace />;
-    };
+    try{
+      if(cookies.get("User")){
+        user = true;
+      };
+      
+    }catch{
+      user = false;
+    }
+    if (!user) {
+      return <Navigate to="/" replace />;
+    }
     return children;
   };
 

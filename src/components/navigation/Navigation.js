@@ -45,6 +45,7 @@ export default function Navigation() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
     navigate("/");
+    cookies.remove("User");
   };
   const handleNavUpdate = () => {
     setAnchorElUser(null);
