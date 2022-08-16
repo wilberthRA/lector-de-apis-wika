@@ -22,7 +22,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CreateAlbumDialog from "./CreateAlbumDialog";
 
 export default function AlbumList(props) {
-  const { id } = useParams();
   const [albums, setAlbums] = useState([]);
   const [filterAlbum, setFilterALbum] = useState("");
   const [open, setOpen] = React.useState(false);
@@ -35,7 +34,7 @@ export default function AlbumList(props) {
   const navigate = useNavigate();
 
   const handleClick = (albumId) => {
-    navigate(`/home/${id}/${albumId}`);
+    navigate(`/home/`);
   };
   useEffect(() => {
     const userId = "62db5911cfb5d8a60fc3a74d";

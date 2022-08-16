@@ -12,19 +12,22 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Mood } from "@mui/icons-material";
-import Name from "../name/Name";
 import { useNavigate, useParams } from "react-router-dom";
+import Cookies from 'universal-cookie';
+import jwt_decode from "jwt-decode";
 const pages = ["Home"];
 const settings = ["Logout"];
+const cookies = new Cookies();
 
 export default function Navigation() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+  const datos = jwt_decode(cookies.get("User"));
+  
   const handleClick = () => {
-    navigate(`/home/${id}`);
+    navigate(`/home`);
   };
 
   const handleOpenNavMenu = (event) => {
@@ -42,6 +45,11 @@ export default function Navigation() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
     navigate("/");
+    cookies.remove("User");
+  };
+  const handleNavUpdate = () => {
+    setAnchorElUser(null);
+    navigate("/home/Update");
   };
 
   return (
@@ -63,7 +71,7 @@ export default function Navigation() {
               textDecoration: "none",
             }}
           >
-            <Name></Name>
+            {datos.name}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -119,7 +127,7 @@ export default function Navigation() {
               textDecoration: "none",
             }}
           >
-            <Name></Name>
+           {datos.name}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -161,6 +169,9 @@ export default function Navigation() {
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
+              <MenuItem onClick={handleNavUpdate}>
+                  <Typography textAlign="center">Account</Typography>
+                </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
