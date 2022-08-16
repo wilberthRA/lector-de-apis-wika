@@ -41,18 +41,20 @@ function App() {
           <Route
             path="home/:id"
             element={
-              <ProtectedRoute user={logged}>
-                <Home />
-              </ProtectedRoute>
+              <Home />
+              // <ProtectedRoute user={logged}>
+              //   <Home />
+              // </ProtectedRoute>
             }
           />
 
           <Route
             path="/home/:id/:album"
             element={
-              <ProtectedRoute user={logged}>
-                <AlbumDetails />
-              </ProtectedRoute>
+              <AlbumDetails />
+              // <ProtectedRoute user={logged}>
+              //   <AlbumDetails />
+              // </ProtectedRoute>
             }
           />
         </Routes>

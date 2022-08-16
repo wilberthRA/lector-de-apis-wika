@@ -18,7 +18,7 @@ export default function Searcher({ label, items, setFilter }) {
       onChange={(event, newValue) => {
         setFilter(newValue);
       }}
-      options={items.map((option) => option.title)}
+      options={items.map((option) => option.name)}
       renderInput={(params) => (
         <TextField
           onChange={handleChange}

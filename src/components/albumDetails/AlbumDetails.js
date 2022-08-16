@@ -18,45 +18,13 @@ import DialogActions from "@mui/material/DialogActions";
 import CloseIcon from "@mui/icons-material/Close";
 import Searcher from "../commons/Searcher";
 import Navigation from "../navigation/Navigation";
-import { Grid, Paper } from "@mui/material";
+import { autocompleteClasses, Grid, Paper } from "@mui/material";
+import { width } from "@mui/system";
+import AddPhotoDialog from "./AddPhotoDialog";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DialogContentText from "@mui/material/DialogContentText";
+import EditIcon from "@mui/icons-material/Edit";
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
-
-const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-};
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
 
 export default function AlbumDetails() {
   const { album } = useParams();
@@ -64,12 +32,14 @@ export default function AlbumDetails() {
   const [title, setTitle] = useState([]);
   const [photo, setPhoto] = useState([]);
   const [filterPhoto, setFilterPhoto] = useState("");
-
   const [open, setOpen] = React.useState(false);
+  const [albumId, setAlbumId] = useState();
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState("");
 
-  const handleClickOpen = (title, photo) => {
-    setTitle(title);
-    setPhoto(photo);
+  const handleClickOpen = (photoId) => {
+    setSelectedPhoto(photoId)
     setOpen(true);
   };
   const handleClose = () => {
@@ -77,22 +47,81 @@ export default function AlbumDetails() {
   };
 
   useEffect(() => {
-    axios.get("https://jsonplaceholder.typicode.com/photos ").then((res) => {
-      const data = res.data;
-      setPhotos(data);
-    });
+    setAlbumId("62ec99f7018d6466c649b7ae");
+    axios
+      .get(`http://localhost:3010/photo/album/62ec99f7018d6466c649b7ae`)
+      .then((res) => {
+        const data = res.data.data;
+        setPhotos(data);
+      });
   }, []);
 
+  const openCreateDialog = () => {
+    setSelectedPhoto({ albumId: albumId });
+    setOpenCreateModal(true);
+  };
+  const closeCreateDialog = () => {
+    setOpenCreateModal(false);
+  };
+  const reloadPhotos = (newPhoto) => {
+    const filteredPhoto = photos.filter((photo) => photo._id !== newPhoto._id);
+    setPhotos([...filteredPhoto, newPhoto]);
+  };
+
+  const deletePhoto = () => {
+    const photoId = selectedPhoto;
+    axios.delete(`http://localhost:3010/photo/${photoId}`).then((res) => {
+      if (res.status === 200) {
+        const newPhotos = photos.filter((v) => v._id !== photoId);
+        setPhotos(newPhotos);
+        handleClose();
+      }
+    });
+  };
+
+  const openEditDialog = (id, name, description, photo, albumId) => {
+    setSelectedPhoto({ id, name, description, photo, albumId });
+    setOpenEditModal(true);
+  };
+
+  const closeEditDialog = () => {
+    setOpenEditModal(false);
+  };
+
+  const CreateModal = openCreateModal ? (
+    <AddPhotoDialog
+      open={openCreateModal}
+      close={closeCreateDialog}
+      title="New Album"
+      button="Create"
+      photo={selectedPhoto}
+      reload={reloadPhotos}
+    />
+  ) : (
+    ""
+  );
+
+  const EditModal = openEditModal ? (
+    <AddPhotoDialog
+      open={openEditModal}
+      close={closeEditDialog}
+      title="Edit Photo"
+      button="Edit"
+      photo={selectedPhoto}
+      reload = {reloadPhotos}
+    />
+  ) : (
+    ""
+  );
   const paperStyle = {
     padding: 20,
     height: "auto",
-    width: '80%',
+    width: "80%",
     margin: "25px auto",
   };
-
-  const dialogSize = {
-    width: 'auto',
-  }
+  const createButton = {
+    display: "flex",
+  };
 
   return (
     <div>
@@ -103,34 +132,55 @@ export default function AlbumDetails() {
             <Typography variant="h4" component="h4">
               Photos
             </Typography>
+            <div style={createButton}>
+              <Button variant="contained" onClick={openCreateDialog}>
+                Add photo
+              </Button>
+            </div>
             <Searcher label="Photo" items={photos} setFilter={setFilterPhoto} />
-            <ImageList  cols={4}>
+            <ImageList cols={4}>
               {photos.map((item) => {
-                if (item?.albumId === parseInt(album)) {
-                  if (!filterPhoto || item?.title.startsWith(filterPhoto)) {
-                    return (
-                      <ImageListItem
-                        key={item.id}
-                        onClick={() => handleClickOpen(item.title, item.url)}
-                      >
-                        <img
-                          src={`${item.thumbnailUrl}?w=164&h=164&fit=crop&auto=format`}
-                          srcSet={`${item.thumbnailUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                          alt={item.title}
-                          loading="lazy"
-                        />
-                        <ImageListItemBar
-                          title={item.title}
-                          actionIcon={
-                            <IconButton
-                              sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                              aria-label={`info about ${item.title}`}
-                            ></IconButton>
-                          }
-                        />
-                      </ImageListItem>
-                    );
-                  }
+                if (!filterPhoto || item?.name.startsWith(filterPhoto)) {
+                  return (
+                    <ImageListItem
+                      key={item._id}
+                    >
+                      <img
+                        src={`${item.photo}?w=164&h=164&fit=crop&auto=format`}
+                        srcSet={`${item.photo}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                        alt={item.title}
+                        loading="lazy"
+                      />
+                      <ImageListItemBar
+                        title={item.name}
+                        subtitle={item.description}
+                        actionIcon={
+                          <div>
+                          <IconButton
+                            sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                            aria-label={`Edit photo ${item.name}`}
+                            onClick={() => openEditDialog(
+                              item._id,
+                              item.name,
+                              item.description,
+                              item.photo,
+                              item.albumId)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          
+                          <IconButton
+                            sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                            aria-label={`Delete photo ${item.name}`}
+                            onClick={() => handleClickOpen(item._id)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                          </div>
+                        }
+                      />
+                    </ImageListItem>
+                  );
                 }
                 return;
               })}
@@ -138,28 +188,20 @@ export default function AlbumDetails() {
           </Grid>
         </Paper>
       </Grid>
-
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-        style={dialogSize}
-      >
-        <BootstrapDialogTitle
-          id="customized-dialog-title"
-          onClose={handleClose}
-        >
-          {title}
-        </BootstrapDialogTitle>
-        <DialogContent >
-          <img
-            src={`${photo}`}
-            srcSet={`${photo}`}
-            alt={title}
-            loading="lazy"
-          />
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Confirm</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            are you sure do want delete it?{" "}
+          </DialogContentText>
         </DialogContent>
-      </BootstrapDialog>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={deletePhoto}>Delete</Button>
+        </DialogActions>
+      </Dialog>
+      {CreateModal}
+      {EditModal}
     </div>
   );
 }
