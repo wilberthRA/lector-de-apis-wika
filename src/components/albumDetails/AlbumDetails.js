@@ -21,10 +21,11 @@ import Navigation from "../navigation/Navigation";
 import { autocompleteClasses, Grid, Paper } from "@mui/material";
 import { width } from "@mui/system";
 import AddPhotoDialog from "./AddPhotoDialog";
+import ShowPhoto from "./ShowPhoto";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DialogContentText from "@mui/material/DialogContentText";
 import EditIcon from "@mui/icons-material/Edit";
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 export default function AlbumDetails() {
   const { album } = useParams();
@@ -36,6 +37,7 @@ export default function AlbumDetails() {
   const [albumId, setAlbumId] = useState();
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [openShowPhotoModal, setOpenShowPhotoModal] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState("");
 
   const handleClickOpen = (photoId) => {
@@ -47,9 +49,9 @@ export default function AlbumDetails() {
   };
 
   useEffect(() => {
-    setAlbumId("62ec99f7018d6466c649b7ae");
+    setAlbumId(album);
     axios
-      .get(`http://localhost:3010/photo/album/62ec99f7018d6466c649b7ae`)
+      .get(`http://localhost:3010/photo/album/${album}`)
       .then((res) => {
         const data = res.data.data;
         setPhotos(data);
@@ -88,6 +90,14 @@ export default function AlbumDetails() {
     setOpenEditModal(false);
   };
 
+  const showPhotoDialog = (name,photo) => {
+    setSelectedPhoto({name, photo});
+    setOpenShowPhotoModal(true);    
+  };
+
+  const hidePhotoDialog = () => {
+    setOpenShowPhotoModal(false);
+  };
   const CreateModal = openCreateModal ? (
     <AddPhotoDialog
       open={openCreateModal}
@@ -113,6 +123,7 @@ export default function AlbumDetails() {
   ) : (
     ""
   );
+
   const paperStyle = {
     padding: 20,
     height: "auto",
@@ -156,6 +167,16 @@ export default function AlbumDetails() {
                         subtitle={item.description}
                         actionIcon={
                           <div>
+                            <IconButton
+                            sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                            aria-label={`Show photo ${item.name}`}
+                            onClick={() => showPhotoDialog(
+                              item.name,
+                              item.photo,
+                              )}
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
                           <IconButton
                             sx={{ color: "rgba(255, 255, 255, 0.54)" }}
                             aria-label={`Edit photo ${item.name}`}
@@ -202,6 +223,11 @@ export default function AlbumDetails() {
       </Dialog>
       {CreateModal}
       {EditModal}
+      {openShowPhotoModal && <ShowPhoto
+        open={openShowPhotoModal}
+        close={hidePhotoDialog}
+        item={selectedPhoto}
+      />}
     </div>
   );
 }

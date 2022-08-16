@@ -20,6 +20,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CreateAlbumDialog from "./CreateAlbumDialog";
+//token
+import jwt_decode from "jwt-decode";
+import Cookies from 'universal-cookie';
+
 
 export default function AlbumList(props) {
   const [albums, setAlbums] = useState([]);
@@ -30,14 +34,17 @@ export default function AlbumList(props) {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [selectedAlbum, setSelectedAlbum] = useState("");
   const [user, setUser] = useState("");
+  //token
+  const cookies = new Cookies();
+  const token = jwt_decode(cookies.get("User"));
 
   const navigate = useNavigate();
 
   const handleClick = (albumId) => {
-    navigate(`/home/`);
+    navigate(`/home/${albumId}`);
   };
   useEffect(() => {
-    const userId = "62db5911cfb5d8a60fc3a74d";
+    const userId = token._id;
     setUser(userId);
     axios.get(`http://localhost:3010/album/user/${userId}`).then((res) => {
       let data = [];
@@ -98,7 +105,7 @@ export default function AlbumList(props) {
       title="New Album"
       button="Create"
       album={selectedAlbum}
-      reload = {reloadAlbums}
+      reload={reloadAlbums}
     />
   ) : (
     ""
@@ -110,7 +117,7 @@ export default function AlbumList(props) {
       title="Edit Album"
       button="Edit"
       album={selectedAlbum}
-      reload = {reloadAlbums}
+      reload={reloadAlbums}
     />
   ) : (
     ""
