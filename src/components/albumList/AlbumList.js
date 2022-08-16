@@ -12,19 +12,18 @@ import { Container, Grid, Paper } from "@mui/material";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 
 export default function AlbumList(props) {
-  const { id } = useParams();
   const [albums, setAlbums] = useState([]);
   const [filterAlbum, setFilterALbum] = useState("");
   const navigate = useNavigate();
 
   const handleClick = (albumId) => {
-    navigate(`/home/${id}/${albumId}`);
+    navigate(`/home/`);
   };
   useEffect(() => {
     axios.get("https://jsonplaceholder.typicode.com/albums ").then((res) => {
       const data = [];
       res.data.map((filtro) => {
-        if (filtro.userId == id) {
+        if (filtro.userId == 0) {
           data.push(filtro);
         }
       });
