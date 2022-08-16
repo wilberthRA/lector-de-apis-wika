@@ -22,8 +22,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CreateAlbumDialog from "./CreateAlbumDialog";
 //token
 import jwt_decode from "jwt-decode";
-import Cookies from 'universal-cookie';
-
+import Cookies from "universal-cookie";
 
 export default function AlbumList(props) {
   const [albums, setAlbums] = useState([]);

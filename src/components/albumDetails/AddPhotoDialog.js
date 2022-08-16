@@ -76,7 +76,7 @@ export default function AddPhotoDialog({
             setDescription(event.target.value);
           }}
         />
-  
+
         <TextField
           margin="dense"
           id="photo"

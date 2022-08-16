@@ -15,7 +15,7 @@ export default function CreateAlbumDialog({
   title,
   button,
   album,
-  reload
+  reload,
 }) {
   const [name, setName] = useState(album?.name || "");
   const [description, setDescription] = useState(album?.description || "");
@@ -28,23 +28,21 @@ export default function CreateAlbumDialog({
     };
     console.log(form);
     if (album?.name) {
-      
-      axios.put(`http://localhost:3010/album/${album.id}`,form).then((res) => {
+      axios.put(`http://localhost:3010/album/${album.id}`, form).then((res) => {
         if (res.status === 200) {
-          console.log("res ",res);
+          console.log("res ", res);
           reload(res.data.data);
         }
       });
-    }else{
-      axios.post(`http://localhost:3010/album`,form).then((res) => {
+    } else {
+      axios.post(`http://localhost:3010/album`, form).then((res) => {
         if (res.status === 201) {
-          console.log("res ",res);
+          console.log("res ", res);
           reload(res.data.data);
-
         }
       });
     }
-    close()
+    close();
   };
 
   return (

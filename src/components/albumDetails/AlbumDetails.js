@@ -25,7 +25,7 @@ import ShowPhoto from "./ShowPhoto";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DialogContentText from "@mui/material/DialogContentText";
 import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export default function AlbumDetails() {
   const { album } = useParams();
@@ -41,7 +41,7 @@ export default function AlbumDetails() {
   const [selectedPhoto, setSelectedPhoto] = useState("");
 
   const handleClickOpen = (photoId) => {
-    setSelectedPhoto(photoId)
+    setSelectedPhoto(photoId);
     setOpen(true);
   };
   const handleClose = () => {
@@ -50,12 +50,10 @@ export default function AlbumDetails() {
 
   useEffect(() => {
     setAlbumId(album);
-    axios
-      .get(`http://localhost:3010/photo/album/${album}`)
-      .then((res) => {
-        const data = res.data.data;
-        setPhotos(data);
-      });
+    axios.get(`http://localhost:3010/photo/album/${album}`).then((res) => {
+      const data = res.data.data;
+      setPhotos(data);
+    });
   }, []);
 
   const openCreateDialog = () => {
@@ -90,9 +88,9 @@ export default function AlbumDetails() {
     setOpenEditModal(false);
   };
 
-  const showPhotoDialog = (name,photo) => {
-    setSelectedPhoto({name, photo});
-    setOpenShowPhotoModal(true);    
+  const showPhotoDialog = (name, photo) => {
+    setSelectedPhoto({ name, photo });
+    setOpenShowPhotoModal(true);
   };
 
   const hidePhotoDialog = () => {
@@ -118,7 +116,7 @@ export default function AlbumDetails() {
       title="Edit Photo"
       button="Edit"
       photo={selectedPhoto}
-      reload = {reloadPhotos}
+      reload={reloadPhotos}
     />
   ) : (
     ""
@@ -153,9 +151,7 @@ export default function AlbumDetails() {
               {photos.map((item) => {
                 if (!filterPhoto || item?.name.startsWith(filterPhoto)) {
                   return (
-                    <ImageListItem
-                      key={item._id}
-                    >
+                    <ImageListItem key={item._id}>
                       <img
                         src={`${item.photo}?w=164&h=164&fit=crop&auto=format`}
                         srcSet={`${item.photo}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
@@ -168,35 +164,37 @@ export default function AlbumDetails() {
                         actionIcon={
                           <div>
                             <IconButton
-                            sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                            aria-label={`Show photo ${item.name}`}
-                            onClick={() => showPhotoDialog(
-                              item.name,
-                              item.photo,
-                              )}
-                          >
-                            <VisibilityIcon />
-                          </IconButton>
-                          <IconButton
-                            sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                            aria-label={`Edit photo ${item.name}`}
-                            onClick={() => openEditDialog(
-                              item._id,
-                              item.name,
-                              item.description,
-                              item.photo,
-                              item.albumId)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          
-                          <IconButton
-                            sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                            aria-label={`Delete photo ${item.name}`}
-                            onClick={() => handleClickOpen(item._id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
+                              sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                              aria-label={`Show photo ${item.name}`}
+                              onClick={() =>
+                                showPhotoDialog(item.name, item.photo)
+                              }
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+                            <IconButton
+                              sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                              aria-label={`Edit photo ${item.name}`}
+                              onClick={() =>
+                                openEditDialog(
+                                  item._id,
+                                  item.name,
+                                  item.description,
+                                  item.photo,
+                                  item.albumId
+                                )
+                              }
+                            >
+                              <EditIcon />
+                            </IconButton>
+
+                            <IconButton
+                              sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                              aria-label={`Delete photo ${item.name}`}
+                              onClick={() => handleClickOpen(item._id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
                           </div>
                         }
                       />
@@ -223,11 +221,13 @@ export default function AlbumDetails() {
       </Dialog>
       {CreateModal}
       {EditModal}
-      {openShowPhotoModal && <ShowPhoto
-        open={openShowPhotoModal}
-        close={hidePhotoDialog}
-        item={selectedPhoto}
-      />}
+      {openShowPhotoModal && (
+        <ShowPhoto
+          open={openShowPhotoModal}
+          close={hidePhotoDialog}
+          item={selectedPhoto}
+        />
+      )}
     </div>
   );
 }

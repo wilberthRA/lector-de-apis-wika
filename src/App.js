@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import Login from "./components/login/Login";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 import {
   BrowserRouter as Router,
   Routes,
@@ -21,7 +21,6 @@ function App() {
   const [info, setInfo] = useState([]);
   const [logged, setLogged] = useState(false);
   useEffect(() => {
-    
     axios.get("http://localhost:3010/User/user").then((res) => {
       const data = res.data;
       setInfo(data);
@@ -29,15 +28,12 @@ function App() {
   }, []);
 
   const ProtectedRoute = ({ user, children }) => {
-    try{
-      if(cookies.get("User")){
+    try {
+      if (cookies.get("User")) {
         user = true;
-        
-      };
-      
-    }catch{
+      }
+    } catch {
       user = false;
-      
     }
     if (!user) {
       return <Navigate to="/" replace />;
@@ -63,13 +59,8 @@ function App() {
               // </ProtectedRoute>
             }
           />
-          
-          <Route
-            path="/signup"
-            element={
-                <Register />
-            }
-          />
+
+          <Route path="/signup" element={<Register />} />
           <Route
             path="/home/:album"
             element={
@@ -83,7 +74,7 @@ function App() {
             path="/home/Update"
             element={
               <ProtectedRoute user={logged}>
-                <Update/>
+                <Update />
               </ProtectedRoute>
             }
           />

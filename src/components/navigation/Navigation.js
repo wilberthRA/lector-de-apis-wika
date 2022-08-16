@@ -13,8 +13,8 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Mood } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
-import Cookies from 'universal-cookie';
-import jwt_decode from "jwt-decode";
+import Cookies from "universal-cookie";
+import jwt_decode from "jwt-decode";
 const pages = ["Home"];
 const settings = ["Logout"];
 const cookies = new Cookies();
@@ -25,7 +25,7 @@ export default function Navigation() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const datos = jwt_decode(cookies.get("User"));
-  
+
   const handleClick = () => {
     navigate(`/home`);
   };
@@ -71,7 +71,7 @@ export default function Navigation() {
               textDecoration: "none",
             }}
           >
-            {datos.name}
+            Welcome {datos.name}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -127,7 +127,7 @@ export default function Navigation() {
               textDecoration: "none",
             }}
           >
-           {datos.name}
+            {datos.name}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -170,8 +170,8 @@ export default function Navigation() {
                 </MenuItem>
               ))}
               <MenuItem onClick={handleNavUpdate}>
-                  <Typography textAlign="center">Account</Typography>
-                </MenuItem>
+                <Typography textAlign="center">Account</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
